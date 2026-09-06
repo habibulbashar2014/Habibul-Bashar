@@ -847,14 +847,14 @@ export const INITIAL_PORTFOLIO_DATA: PortfolioData = {
                 <h3 className="text-sm font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">
                   Social Links
                 </h3>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                   <div className="space-y-1.5">
                     <label className="text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400 block">
                       Facebook URL
                     </label>
                     <input
                       type="url"
-                      value={formData.personalInfo.socials.facebook}
+                      value={formData.personalInfo.socials?.facebook || ''}
                       onChange={(e) =>
                         setFormData({
                           ...formData,
@@ -877,7 +877,7 @@ export const INITIAL_PORTFOLIO_DATA: PortfolioData = {
                     </label>
                     <input
                       type="url"
-                      value={formData.personalInfo.socials.instagram}
+                      value={formData.personalInfo.socials?.instagram || ''}
                       onChange={(e) =>
                         setFormData({
                           ...formData,
@@ -900,7 +900,7 @@ export const INITIAL_PORTFOLIO_DATA: PortfolioData = {
                     </label>
                     <input
                       type="url"
-                      value={formData.personalInfo.socials.linkedin}
+                      value={formData.personalInfo.socials?.linkedin || ''}
                       onChange={(e) =>
                         setFormData({
                           ...formData,
@@ -909,6 +909,30 @@ export const INITIAL_PORTFOLIO_DATA: PortfolioData = {
                             socials: {
                               ...formData.personalInfo.socials,
                               linkedin: e.target.value,
+                            },
+                          },
+                        })
+                      }
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm"
+                    />
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400 block">
+                      WhatsApp Link (wa.me)
+                    </label>
+                    <input
+                      type="url"
+                      placeholder="https://wa.me/8801518477577"
+                      value={formData.personalInfo.socials?.whatsapp || ''}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          personalInfo: {
+                            ...formData.personalInfo,
+                            socials: {
+                              ...formData.personalInfo.socials,
+                              whatsapp: e.target.value,
                             },
                           },
                         })

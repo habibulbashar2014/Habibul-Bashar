@@ -121,7 +121,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenCv }) => {
                 Connect:
               </span>
               <div className="flex items-center gap-2.5">
-                {personalInfo.socials.facebook && (
+                {personalInfo?.socials?.facebook && (
                   <a
                     href={personalInfo.socials.facebook}
                     target="_blank"
@@ -133,7 +133,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenCv }) => {
                     <Facebook className="w-4 h-4" />
                   </a>
                 )}
-                {personalInfo.socials.instagram && (
+                {personalInfo?.socials?.instagram && (
                   <a
                     href={personalInfo.socials.instagram}
                     target="_blank"
@@ -145,7 +145,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenCv }) => {
                     <Instagram className="w-4 h-4" />
                   </a>
                 )}
-                {personalInfo.socials.linkedin && (
+                {personalInfo?.socials?.linkedin && (
                   <a
                     href={personalInfo.socials.linkedin}
                     target="_blank"
@@ -157,7 +157,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenCv }) => {
                     <Linkedin className="w-4 h-4" />
                   </a>
                 )}
-                {personalInfo.socials.whatsapp && (
+                {personalInfo?.socials?.whatsapp && (
                   <a
                     href={personalInfo.socials.whatsapp}
                     target="_blank"

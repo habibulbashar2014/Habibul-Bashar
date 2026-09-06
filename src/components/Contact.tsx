@@ -188,7 +188,7 @@ export const Contact: React.FC<ContactProps> = ({ onOpenCv }) => {
                 </span>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   <a
-                    href={personalInfo.socials.facebook}
+                    href={personalInfo?.socials?.facebook || '#'}
                     target="_blank"
                     rel="noopener noreferrer"
                     id="contact-facebook-link"
@@ -201,7 +201,7 @@ export const Contact: React.FC<ContactProps> = ({ onOpenCv }) => {
                   </a>
 
                   <a
-                    href={personalInfo.socials.instagram}
+                    href={personalInfo?.socials?.instagram || '#'}
                     target="_blank"
                     rel="noopener noreferrer"
                     id="contact-instagram-link"
@@ -214,7 +214,7 @@ export const Contact: React.FC<ContactProps> = ({ onOpenCv }) => {
                   </a>
 
                   <a
-                    href={personalInfo.socials.linkedin}
+                    href={personalInfo?.socials?.linkedin || '#'}
                     target="_blank"
                     rel="noopener noreferrer"
                     id="contact-linkedin-link"

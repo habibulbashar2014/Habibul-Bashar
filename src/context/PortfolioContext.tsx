@@ -67,6 +67,10 @@ export const PortfolioProvider: React.FC<{ children: React.ReactNode }> = ({ chi
               socials: {
                 ...INITIAL_PORTFOLIO_DATA.personalInfo.socials,
                 ...(parsed.personalInfo?.socials || {}),
+                whatsapp:
+                  parsed.personalInfo?.socials?.whatsapp ||
+                  INITIAL_PORTFOLIO_DATA.personalInfo.socials.whatsapp ||
+                  'https://wa.me/8801518477577',
               },
             },
           };
