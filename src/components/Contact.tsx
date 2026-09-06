@@ -1,0 +1,340 @@
+import React, { useState } from 'react';
+import {
+  Mail,
+  MapPin,
+  Send,
+  Facebook,
+  Instagram,
+  Linkedin,
+  FileDown,
+  CheckCircle2,
+  Copy,
+  Check,
+  ExternalLink,
+} from 'lucide-react';
+import { usePortfolio } from '../context/PortfolioContext';
+
+interface ContactProps {
+  onOpenCv: () => void;
+}
+
+export const Contact: React.FC<ContactProps> = ({ onOpenCv }) => {
+  const { data } = usePortfolio();
+  const { personalInfo } = data;
+
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    subject: '',
+    message: '',
+  });
+
+  const [copiedEmail, setCopiedEmail] = useState(false);
+  const [formSubmitted, setFormSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleCopyEmail = () => {
+    navigator.clipboard.writeText(personalInfo.email);
+    setCopiedEmail(true);
+    setTimeout(() => setCopiedEmail(false), 2500);
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!formData.name || !formData.email || !formData.message) return;
+
+    setIsSubmitting(true);
+
+    // Simulate reliable submission feedback
+    setTimeout(() => {
+      setIsSubmitting(false);
+      setFormSubmitted(true);
+    }, 600);
+  };
+
+  const handleOpenMailClient = () => {
+    const subject = encodeURIComponent(formData.subject || 'Portfolio Inquiry');
+    const body = encodeURIComponent(
+      `Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`
+    );
+    window.location.href = `mailto:${personalInfo.email}?subject=${subject}&body=${body}`;
+  };
+
+  return (
+    <section id="contact" className="py-20 sm:py-24 bg-transparent transition-colors">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Section Header */}
+        <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
+          <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider text-blue-700 dark:text-blue-300 bg-blue-100 dark:bg-blue-950/70 border border-blue-200/80 dark:border-blue-800/80">
+            Get in Touch
+          </div>
+          <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white tracking-tight">
+            Let’s Connect
+          </h2>
+          <p className="text-base sm:text-lg text-slate-600 dark:text-slate-400">
+            Whether you have a job opportunity, technical inquiry, or simply want to say hello, my inbox is always open.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 max-w-6xl mx-auto">
+          {/* Left Column: Direct Info & Social Cards */}
+          <div className="lg:col-span-5 space-y-6">
+            <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-8 shadow-sm space-y-6">
+              <h3 className="text-xl font-bold text-slate-900 dark:text-white tracking-tight">
+                Contact Information
+              </h3>
+              <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+                Feel free to reach out via email or connect with me across my verified social channels.
+              </p>
+
+              {/* Email Card */}
+              <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700/80 space-y-2">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2.5 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                    <Mail className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                    <span>Email Address</span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={handleCopyEmail}
+                    className="inline-flex items-center gap-1 text-[11px] font-bold text-blue-600 dark:text-blue-400 hover:underline"
+                    aria-label="Copy email address"
+                  >
+                    {copiedEmail ? (
+                      <>
+                        <Check className="w-3.5 h-3.5 text-emerald-500" />
+                        <span className="text-emerald-600 dark:text-emerald-400">Copied</span>
+                      </>
+                    ) : (
+                      <>
+                        <Copy className="w-3.5 h-3.5" />
+                        <span>Copy</span>
+                      </>
+                    )}
+                  </button>
+                </div>
+                <a
+                  href={`mailto:${personalInfo.email}`}
+                  className="block text-base font-semibold text-slate-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors break-all"
+                >
+                  {personalInfo.email}
+                </a>
+              </div>
+
+              {/* Location Card */}
+              <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700/80 space-y-1">
+                <div className="flex items-center gap-2.5 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                  <MapPin className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                  <span>Current Location</span>
+                </div>
+                <p className="text-base font-semibold text-slate-900 dark:text-white">
+                  {personalInfo.location}
+                </p>
+              </div>
+
+              {/* Social Channels Section */}
+              <div className="pt-2 space-y-3">
+                <span className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 block">
+                  Social Profiles
+                </span>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <a
+                    href={personalInfo.socials.facebook}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    id="contact-facebook-link"
+                    className="flex items-center gap-2.5 p-3 rounded-2xl border border-slate-200 dark:border-slate-800 hover:border-blue-400 dark:hover:border-blue-500 hover:bg-blue-50/50 dark:hover:bg-blue-950/30 text-slate-700 dark:text-slate-200 transition-all group"
+                  >
+                    <div className="w-8 h-8 rounded-xl bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-400 flex items-center justify-center group-hover:scale-105 transition-transform">
+                      <Facebook className="w-4 h-4" />
+                    </div>
+                    <span className="text-xs font-bold">Facebook</span>
+                  </a>
+
+                  <a
+                    href={personalInfo.socials.instagram}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    id="contact-instagram-link"
+                    className="flex items-center gap-2.5 p-3 rounded-2xl border border-slate-200 dark:border-slate-800 hover:border-pink-400 dark:hover:border-pink-500 hover:bg-pink-50/50 dark:hover:bg-pink-950/30 text-slate-700 dark:text-slate-200 transition-all group"
+                  >
+                    <div className="w-8 h-8 rounded-xl bg-pink-50 dark:bg-pink-950 text-pink-600 dark:text-pink-400 flex items-center justify-center group-hover:scale-105 transition-transform">
+                      <Instagram className="w-4 h-4" />
+                    </div>
+                    <span className="text-xs font-bold">Instagram</span>
+                  </a>
+
+                  <a
+                    href={personalInfo.socials.linkedin}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    id="contact-linkedin-link"
+                    className="flex items-center gap-2.5 p-3 rounded-2xl border border-slate-200 dark:border-slate-800 hover:border-blue-500 dark:hover:border-blue-400 hover:bg-blue-50/50 dark:hover:bg-blue-950/30 text-slate-700 dark:text-slate-200 transition-all group"
+                  >
+                    <div className="w-8 h-8 rounded-xl bg-blue-50 dark:bg-blue-950 text-blue-700 dark:text-blue-300 flex items-center justify-center group-hover:scale-105 transition-transform">
+                      <Linkedin className="w-4 h-4" />
+                    </div>
+                    <span className="text-xs font-bold">LinkedIn</span>
+                  </a>
+                </div>
+              </div>
+
+              {/* Download CV CTA */}
+              <div className="pt-4 border-t border-slate-100 dark:border-slate-800">
+                <button
+                  type="button"
+                  onClick={onOpenCv}
+                  id="contact-download-cv-btn"
+                  className="w-full flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm shadow-lg shadow-blue-500/25 transition-all hover:scale-[1.01] active:scale-[0.99]"
+                >
+                  <FileDown className="w-4 h-4" />
+                  <span>Download My CV</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Right Column: Contact Message Form */}
+          <div className="lg:col-span-7">
+            <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-8 shadow-sm">
+              <h3 className="text-xl font-bold text-slate-900 dark:text-white tracking-tight mb-2">
+                Send a Message
+              </h3>
+              <p className="text-sm text-slate-600 dark:text-slate-400 mb-6">
+                Fill out the form below and I will get back to you promptly.
+              </p>
+
+              {formSubmitted ? (
+                <div className="p-8 rounded-2xl bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-200 dark:border-emerald-800 text-center space-y-4 animate-in fade-in duration-300">
+                  <div className="w-14 h-14 rounded-full bg-emerald-100 dark:bg-emerald-900/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mx-auto shadow-sm">
+                    <CheckCircle2 className="w-8 h-8" />
+                  </div>
+                  <div className="space-y-1">
+                    <h4 className="text-lg font-bold text-slate-900 dark:text-white">
+                      Message Prepared Successfully!
+                    </h4>
+                    <p className="text-sm text-slate-600 dark:text-slate-300 max-w-md mx-auto">
+                      Thank you for reaching out, <strong>{formData.name}</strong>. You can also send this directly via your email software.
+                    </p>
+                  </div>
+
+                  <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
+                    <button
+                      type="button"
+                      onClick={handleOpenMailClient}
+                      className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold shadow-sm"
+                    >
+                      <Mail className="w-4 h-4" />
+                      <span>Send via Email Client</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setFormSubmitted(false);
+                        setFormData({ name: '', email: '', subject: '', message: '' });
+                      }}
+                      className="px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800"
+                    >
+                      Send Another Message
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <form onSubmit={handleSubmit} className="space-y-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="space-y-1.5 text-left">
+                      <label
+                        htmlFor="contact-name"
+                        className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300"
+                      >
+                        Your Name *
+                      </label>
+                      <input
+                        id="contact-name"
+                        type="text"
+                        required
+                        value={formData.name}
+                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                        placeholder="e.g. John Doe"
+                        className="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/70 dark:bg-slate-800/60 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-sm"
+                      />
+                    </div>
+
+                    <div className="space-y-1.5 text-left">
+                      <label
+                        htmlFor="contact-email"
+                        className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300"
+                      >
+                        Your Email *
+                      </label>
+                      <input
+                        id="contact-email"
+                        type="email"
+                        required
+                        value={formData.email}
+                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                        placeholder="john@example.com"
+                        className="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/70 dark:bg-slate-800/60 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-sm"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-1.5 text-left">
+                    <label
+                      htmlFor="contact-subject"
+                      className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300"
+                    >
+                      Subject
+                    </label>
+                    <input
+                      id="contact-subject"
+                      type="text"
+                      value={formData.subject}
+                      onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
+                      placeholder="e.g. Career Opportunity / Project Discussion"
+                      className="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/70 dark:bg-slate-800/60 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-sm"
+                    />
+                  </div>
+
+                  <div className="space-y-1.5 text-left">
+                    <label
+                      htmlFor="contact-message"
+                      className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300"
+                    >
+                      Message *
+                    </label>
+                    <textarea
+                      id="contact-message"
+                      required
+                      rows={5}
+                      value={formData.message}
+                      onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                      placeholder="Write your message here..."
+                      className="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/70 dark:bg-slate-800/60 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-sm resize-none"
+                    />
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    id="contact-submit-btn"
+                    className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-base shadow-lg shadow-blue-500/25 transition-all hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  >
+                    {isSubmitting ? (
+                      <span>Sending...</span>
+                    ) : (
+                      <>
+                        <Send className="w-4 h-4" />
+                        <span>Send Message</span>
+                      </>
+                    )}
+                  </button>
+                </form>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
