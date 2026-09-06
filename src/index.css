@@ -54,26 +54,55 @@
 }
 
 @media print {
-  body {
-    background: white !important;
-    color: black !important;
+  @page {
+    size: A4;
+    margin: 12mm 15mm;
   }
-  .no-print {
+  html, body {
+    background: #ffffff !important;
+    color: #0f172a !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+  .no-print,
+  #main-content,
+  nav,
+  footer,
+  #floating-back-to-top-btn,
+  #admin-floating-badge {
     display: none !important;
   }
-  #printable-cv, #printable-cv * {
-    visibility: visible !important;
+  div:has(#printable-cv),
+  [role="dialog"] {
+    position: static !important;
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+    background: transparent !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
   }
   #printable-cv {
-    position: absolute !important;
-    left: 0 !important;
-    top: 0 !important;
+    display: block !important;
+    position: static !important;
     width: 100% !important;
+    height: auto !important;
+    overflow: visible !important;
     margin: 0 !important;
-    padding: 20px !important;
+    padding: 0 !important;
     box-shadow: none !important;
     border: none !important;
-    background: white !important;
-    color: black !important;
+    background: #ffffff !important;
+    color: #0f172a !important;
+    page-break-inside: auto;
+  }
+  #printable-cv * {
+    color: inherit !important;
+    background: transparent !important;
   }
 }

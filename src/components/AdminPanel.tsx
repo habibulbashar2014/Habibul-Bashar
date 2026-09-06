@@ -21,6 +21,10 @@ import {
   Eye,
   EyeOff,
   AlertTriangle,
+  Copy,
+  Check,
+  FileCode,
+  Globe,
 } from 'lucide-react';
 import { usePortfolio } from '../context/PortfolioContext';
 import {
@@ -59,6 +63,7 @@ export const AdminPanel: React.FC = () => {
   const [passError, setPassError] = useState('');
   const [passSuccess, setPassSuccess] = useState('');
   const [showPassFields, setShowPassFields] = useState(false);
+  const [copiedCode, setCopiedCode] = useState(false);
 
   // Sync formData when data changes from outside (e.g. initial open)
   React.useEffect(() => {
@@ -67,6 +72,7 @@ export const AdminPanel: React.FC = () => {
       setSaveToast(false);
       setPassError('');
       setPassSuccess('');
+      setCopiedCode(false);
     }
   }, [isAdminPanelOpen, data]);
 
@@ -77,6 +83,61 @@ export const AdminPanel: React.FC = () => {
     saveAll(toSave);
     setSaveToast(true);
     setTimeout(() => setSaveToast(false), 3000);
+  };
+
+  const generateTypeScriptDataFile = (curData: PortfolioData): string => {
+    return `import {
+  EducationItem,
+  ComputerSkill,
+  LanguageSkill,
+  HobbyItem,
+  HighlightCard,
+  PersonalInfo,
+  PortfolioData,
+} from '../types';
+
+export const PERSONAL_INFO: PersonalInfo = ${JSON.stringify(curData.personalInfo, null, 2)};
+
+export const HIGHLIGHT_CARDS: HighlightCard[] = ${JSON.stringify(curData.highlightCards, null, 2)};
+
+export const EDUCATION_DATA: EducationItem[] = ${JSON.stringify(curData.education, null, 2)};
+
+export const COMPUTER_SKILLS: ComputerSkill[] = ${JSON.stringify(curData.skills, null, 2)};
+
+export const LANGUAGE_SKILLS: LanguageSkill[] = ${JSON.stringify(curData.languages, null, 2)};
+
+export const HOBBIES_DATA: HobbyItem[] = ${JSON.stringify(curData.hobbies, null, 2)};
+
+export const INITIAL_PORTFOLIO_DATA: PortfolioData = {
+  personalInfo: PERSONAL_INFO,
+  education: EDUCATION_DATA,
+  skills: COMPUTER_SKILLS,
+  languages: LANGUAGE_SKILLS,
+  hobbies: HOBBIES_DATA,
+  highlightCards: HIGHLIGHT_CARDS,
+};
+`;
+  };
+
+  const handleDownloadTsFile = () => {
+    const content = generateTypeScriptDataFile(formData);
+    const blob = new Blob([content], { type: 'text/typescript;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'portfolioData.ts';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
+  const handleCopyTsCode = () => {
+    const content = generateTypeScriptDataFile(formData);
+    navigator.clipboard.writeText(content).then(() => {
+      setCopiedCode(true);
+      setTimeout(() => setCopiedCode(false), 3000);
+    });
   };
 
   // Image upload handler for Avatar
@@ -289,6 +350,18 @@ export const AdminPanel: React.FC = () => {
                 <span>Saved Live!</span>
               </div>
             )}
+
+            <button
+              type="button"
+              onClick={() => {
+                setActiveTab('security');
+              }}
+              title="View how to publish updates so other people can see them on GitHub Pages"
+              className="hidden sm:inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-blue-200 dark:border-blue-800 text-blue-700 dark:text-blue-300 bg-blue-50/70 dark:bg-blue-950/40 text-xs font-bold transition-all hover:bg-blue-100"
+            >
+              <Globe className="w-3.5 h-3.5" />
+              <span>Publish for GitHub</span>
+            </button>
 
             <button
               type="button"
@@ -1390,6 +1463,62 @@ export const AdminPanel: React.FC = () => {
                     </button>
                   </div>
                 </form>
+              </div>
+
+              {/* Publish Updates to GitHub / Live Sync Card */}
+              <div className="p-6 rounded-3xl border border-blue-200 dark:border-blue-900/60 bg-blue-50/50 dark:bg-blue-950/20 shadow-sm space-y-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center shadow-md">
+                    <Globe className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h4 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                      <span>Publish Changes for All Visitors (গিটহাবে আপডেট)</span>
+                      <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
+                        GitHub Pages
+                      </span>
+                    </h4>
+                    <p className="text-xs text-slate-600 dark:text-slate-300 mt-0.5">
+                      অন্যরা আপনার পরিবর্তন দেখতে পাচ্ছে না কেন এবং কীভাবে সবার জন্য লাইভ করবেন?
+                    </p>
+                  </div>
+                </div>
+
+                <div className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-blue-100 dark:border-blue-900/40 text-xs text-slate-700 dark:text-slate-300 space-y-2 leading-relaxed">
+                  <p>
+                    📌 <strong>কেন অন্য কেউ দেখতে পায় না:</strong> এডমিন প্যানেল দিয়ে আপনি যা এডিট করেন, তা তাৎক্ষণিকভাবে আপনার নিজস্ব ব্রাউজারে (<code className="px-1 py-0.5 rounded bg-slate-100 dark:bg-slate-800">localStorage</code>) সেভ হয়। কিন্তু GitHub Pages একটি স্ট্যাটিক সাইট হওয়ায় কোড পরিবর্তন না করা পর্যন্ত বাইরের দর্শকরা আগের তথ্যই দেখতে পাবে।
+                  </p>
+                  <p>
+                    🚀 <strong>সবার জন্য লাইভ করার সহজ উপায়:</strong>
+                  </p>
+                  <ol className="list-decimal pl-5 space-y-1 font-medium">
+                    <li>নিচের <strong>&ldquo;Download portfolioData.ts&rdquo;</strong> বাটনে ক্লিক করে আপডেটেড ফাইলটি ডাউনলোড করুন।</li>
+                    <li>আপনার GitHub রিপোজিটরির <code className="px-1 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-blue-600">src/data/portfolioData.ts</code> ফাইলটিতে এটি আপলোড বা রিপ্লেস করুন।</li>
+                    <li>অথবা আমাদের AI Studio চ্যাটে লিখে বলুন: <em>&ldquo;আমার অমুক তথ্য পরিবর্তন করে দাও&rdquo;</em> — আমি সরাসরি কোডে আপডেট করে বিল্ড বানিয়ে দেব!</li>
+                  </ol>
+                </div>
+
+                <div className="flex flex-wrap items-center gap-3 pt-1">
+                  <button
+                    type="button"
+                    onClick={handleDownloadTsFile}
+                    id="admin-download-ts-data-btn"
+                    className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition-all shadow-md shadow-blue-500/20 hover:scale-105 active:scale-95"
+                  >
+                    <FileCode className="w-4 h-4" />
+                    <span>Download portfolioData.ts</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={handleCopyTsCode}
+                    id="admin-copy-ts-code-btn"
+                    className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-blue-300 dark:border-blue-700 bg-white hover:bg-blue-50 dark:bg-slate-900 dark:hover:bg-slate-800 text-blue-700 dark:text-blue-300 text-xs font-bold transition-all shadow-xs"
+                  >
+                    {copiedCode ? <Check className="w-4 h-4 text-emerald-500" /> : <Copy className="w-4 h-4" />}
+                    <span>{copiedCode ? 'Code Copied!' : 'Copy Code to Clipboard'}</span>
+                  </button>
+                </div>
               </div>
 
               {/* Data Export / Import Card */}
