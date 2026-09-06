@@ -16,6 +16,7 @@ import { CvModal } from './components/CvModal';
 import { AdminLoginModal } from './components/AdminLoginModal';
 import { AdminPanel } from './components/AdminPanel';
 import { AdminFloatingControl } from './components/AdminFloatingControl';
+import { WhatsAppFloatingButton } from './components/WhatsAppFloatingButton';
 
 function PortfolioApp() {
   const [darkMode, setDarkMode] = useState<boolean>(() => {
@@ -95,11 +96,14 @@ function PortfolioApp() {
           onClick={scrollToTop}
           aria-label="Scroll back to top"
           id="floating-back-to-top-btn"
-          className="fixed bottom-6 right-6 z-40 p-3 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white shadow-lg shadow-blue-500/30 transition-all duration-300 hover:scale-110 active:scale-95 focus:outline-none focus:ring-2 focus:ring-blue-400 no-print"
+          className="fixed bottom-24 right-6 z-40 p-3 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white shadow-lg shadow-blue-500/30 transition-all duration-300 hover:scale-110 active:scale-95 focus:outline-none focus:ring-2 focus:ring-blue-400 no-print"
         >
           <ArrowUp className="w-5 h-5" />
         </button>
       )}
+
+      {/* Animated Floating WhatsApp Popup Button */}
+      <WhatsAppFloatingButton />
     </div>
   );
 }

@@ -37,6 +37,7 @@ export const PERSONAL_INFO: PersonalInfo = {
     facebook: 'https://www.facebook.com/habibulbashar.2014',
     instagram: 'https://www.instagram.com/habibul_bashar_2014',
     linkedin: 'https://www.linkedin.com/in/habibul-bashar-2018himu',
+    whatsapp: 'https://wa.me/8801518477577',
     github: '',
   },
 };

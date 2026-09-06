@@ -68,6 +68,7 @@ export interface PersonalInfo {
     instagram: string;
     linkedin: string;
     github?: string;
+    whatsapp?: string;
   };
 }
 

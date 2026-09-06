@@ -12,6 +12,7 @@ import {
   Facebook,
   Mail,
   ArrowDown,
+  MessageCircle,
 } from 'lucide-react';
 import { usePortfolio } from '../context/PortfolioContext';
 import defaultAvatarImg from '../assets/images/habibul_bashar_avatar_1788668051645.jpg';
@@ -154,6 +155,19 @@ export const Hero: React.FC<HeroProps> = ({ onOpenCv }) => {
                     className="w-10 h-10 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex items-center justify-center text-slate-600 dark:text-slate-300 hover:text-blue-700 dark:hover:text-blue-400 hover:border-blue-400 dark:hover:border-blue-600 transition-all hover:scale-110 shadow-sm"
                   >
                     <Linkedin className="w-4 h-4" />
+                  </a>
+                )}
+                {personalInfo.socials.whatsapp && (
+                  <a
+                    href={personalInfo.socials.whatsapp}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    id="hero-social-whatsapp"
+                    aria-label="WhatsApp Chat"
+                    title="Chat on WhatsApp"
+                    className="w-10 h-10 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex items-center justify-center text-slate-600 dark:text-slate-300 hover:text-emerald-500 hover:border-emerald-500 dark:hover:border-emerald-500 transition-all hover:scale-110 shadow-sm"
+                  >
+                    <MessageCircle className="w-4 h-4" />
                   </a>
                 )}
                 {personalInfo.email && (

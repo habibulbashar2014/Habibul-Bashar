@@ -11,6 +11,7 @@ import {
   Copy,
   Check,
   ExternalLink,
+  MessageCircle,
 } from 'lucide-react';
 import { usePortfolio } from '../context/PortfolioContext';
 
@@ -142,6 +143,30 @@ export const Contact: React.FC<ContactProps> = ({ onOpenCv }) => {
                   className="block text-base font-semibold text-slate-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors break-all"
                 >
                   {personalInfo.email}
+                </a>
+              </div>
+
+              {/* WhatsApp Card */}
+              <div className="p-4 rounded-2xl bg-emerald-50/60 dark:bg-emerald-950/30 border border-emerald-200/80 dark:border-emerald-800/60 space-y-2">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2.5 text-xs font-bold uppercase tracking-wider text-emerald-700 dark:text-emerald-400">
+                    <MessageCircle className="w-4 h-4" />
+                    <span>WhatsApp Chat</span>
+                  </div>
+                  <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 dark:bg-emerald-900 text-emerald-800 dark:text-emerald-200 flex items-center gap-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                    <span>Active Now</span>
+                  </span>
+                </div>
+                <a
+                  href="https://wa.me/8801518477577"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  id="contact-whatsapp-direct-link"
+                  className="inline-flex items-center gap-2 text-base font-semibold text-emerald-700 dark:text-emerald-300 hover:text-emerald-800 dark:hover:text-emerald-200 transition-colors"
+                >
+                  <span>+880 1518-477577 (wa.me)</span>
+                  <ExternalLink className="w-3.5 h-3.5" />
                 </a>
               </div>
 
