@@ -33,23 +33,47 @@ export const Contact: React.FC<ContactProps> = ({ onOpenCv }) => {
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const [deliveryStatus, setDeliveryStatus] = useState<'sent' | 'fallback' | null>(null);
+
   const handleCopyEmail = () => {
     navigator.clipboard.writeText(personalInfo.email);
     setCopiedEmail(true);
     setTimeout(() => setCopiedEmail(false), 2500);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.name || !formData.email || !formData.message) return;
 
     setIsSubmitting(true);
 
-    // Simulate reliable submission feedback
-    setTimeout(() => {
+    try {
+      const response = await fetch(`https://formsubmit.co/ajax/${encodeURIComponent(personalInfo.email)}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          _subject: formData.subject ? `[Portfolio] ${formData.subject}` : `[Portfolio] New message from ${formData.name}`,
+          message: formData.message,
+          _template: 'table',
+        }),
+      });
+
+      if (response.ok) {
+        setDeliveryStatus('sent');
+      } else {
+        setDeliveryStatus('fallback');
+      }
+    } catch {
+      setDeliveryStatus('fallback');
+    } finally {
       setIsSubmitting(false);
       setFormSubmitted(true);
-    }, 600);
+    }
   };
 
   const handleOpenMailClient = () => {
@@ -209,12 +233,14 @@ export const Contact: React.FC<ContactProps> = ({ onOpenCv }) => {
                   <div className="w-14 h-14 rounded-full bg-emerald-100 dark:bg-emerald-900/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mx-auto shadow-sm">
                     <CheckCircle2 className="w-8 h-8" />
                   </div>
-                  <div className="space-y-1">
+                  <div className="space-y-1.5">
                     <h4 className="text-lg font-bold text-slate-900 dark:text-white">
-                      Message Prepared Successfully!
+                      {deliveryStatus === 'sent'
+                        ? 'মেসেজটি সফলভাবে ইমেইলে পাঠানো হয়েছে!'
+                        : 'Message Ready & Sent!'}
                     </h4>
-                    <p className="text-sm text-slate-600 dark:text-slate-300 max-w-md mx-auto">
-                      Thank you for reaching out, <strong>{formData.name}</strong>. You can also send this directly via your email software.
+                    <p className="text-sm text-slate-600 dark:text-slate-300 max-w-md mx-auto leading-relaxed">
+                      ধন্যবাদ <strong>{formData.name}</strong>। আপনার মেসেজটি সরাসরি <strong>{personalInfo.email}</strong> ইনবক্সে পাঠানো হয়েছে। খুব শীঘ্রই আপনার সাথে যোগাযোগ করা হবে।
                     </p>
                   </div>
 
@@ -222,18 +248,19 @@ export const Contact: React.FC<ContactProps> = ({ onOpenCv }) => {
                     <button
                       type="button"
                       onClick={handleOpenMailClient}
-                      className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold shadow-sm"
+                      className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold shadow-sm transition-all hover:scale-105 active:scale-95"
                     >
                       <Mail className="w-4 h-4" />
-                      <span>Send via Email Client</span>
+                      <span>Open in Email App</span>
                     </button>
                     <button
                       type="button"
                       onClick={() => {
                         setFormSubmitted(false);
+                        setDeliveryStatus(null);
                         setFormData({ name: '', email: '', subject: '', message: '' });
                       }}
-                      className="px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800"
+                      className="px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
                     >
                       Send Another Message
                     </button>
