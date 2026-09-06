@@ -58,6 +58,8 @@ export const PortfolioProvider: React.FC<{ children: React.ReactNode }> = ({ chi
             personalInfo: {
               ...INITIAL_PORTFOLIO_DATA.personalInfo,
               ...(parsed.personalInfo || {}),
+              avatarUrl:
+                parsed.personalInfo?.avatarUrl || INITIAL_PORTFOLIO_DATA.personalInfo.avatarUrl,
               stats: {
                 ...INITIAL_PORTFOLIO_DATA.personalInfo.stats,
                 ...(parsed.personalInfo?.stats || {}),

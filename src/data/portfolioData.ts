@@ -26,7 +26,8 @@ export const PERSONAL_INFO: PersonalInfo = {
   dateOfBirth: '06 December 2001',
   nationality: 'Bangladeshi',
   maritalStatus: 'Single',
-  avatarUrl: '',
+  avatarUrl:
+    'https://res.cloudinary.com/cvbxk5vv/image/upload/v1788674181/WhatsApp_Image_2026-09-06_at_11.08.54_AM.jpg',
   stats: {
     graduationYear: '2022',
     skillsCount: '7+',

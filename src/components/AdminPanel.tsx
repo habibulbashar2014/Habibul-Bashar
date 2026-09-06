@@ -457,7 +457,11 @@ export const INITIAL_PORTFOLIO_DATA: PortfolioData = {
                           onClick={() => {
                             const next = {
                               ...formData,
-                              personalInfo: { ...formData.personalInfo, avatarUrl: '' },
+                              personalInfo: {
+                                ...formData.personalInfo,
+                                avatarUrl:
+                                  'https://res.cloudinary.com/cvbxk5vv/image/upload/v1788674181/WhatsApp_Image_2026-09-06_at_11.08.54_AM.jpg',
+                              },
                             };
                             setFormData(next);
                             triggerSave(next);
@@ -465,9 +469,28 @@ export const INITIAL_PORTFOLIO_DATA: PortfolioData = {
                           className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-rose-50 dark:hover:bg-rose-950/50 hover:text-rose-600 text-xs font-bold transition-colors"
                         >
                           <RotateCcw className="w-3.5 h-3.5" />
-                          <span>Reset to Default</span>
+                          <span>Reset to Cloudinary Photo</span>
                         </button>
                       )}
+                    </div>
+
+                    <div className="pt-2">
+                      <label className="block text-[11px] font-semibold text-slate-500 dark:text-slate-400 mb-1">
+                        Direct Image Link / URL (Cloudinary, Imgur, etc.):
+                      </label>
+                      <input
+                        type="url"
+                        placeholder="https://res.cloudinary.com/..."
+                        value={formData.personalInfo.avatarUrl || ''}
+                        onChange={(e) => {
+                          const val = e.target.value;
+                          setFormData({
+                            ...formData,
+                            personalInfo: { ...formData.personalInfo, avatarUrl: val },
+                          });
+                        }}
+                        className="w-full text-xs px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      />
                     </div>
                   </div>
                 </div>
